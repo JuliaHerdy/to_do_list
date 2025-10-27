@@ -1,0 +1,41 @@
+services:
+  telnav_pdi_backend:
+    container_name: "telnav_pdi_backend"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "80:80"
+    networks:
+      telnav_pdi_network:
+        ipv4_address: 192.168.241.60
+    entrypoint: apache2-foreground
+    volumes:
+      - .:/var/www/html
+    tty: true
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  telnav_pdi_database:
+    image: postgres
+    container_name: "telnav_pdi_database"
+    ports:
+      - "5432:5432"
+    networks:
+      telnav_pdi_network:
+        ipv4_address: 192.168.241.61
+    volumes:
+      - ./.docker/database:/var/lib/postgresql
+    working_dir: /var/lib/postgresql
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=database
+
+networks:
+  telnav_pdi_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.241.0/24
