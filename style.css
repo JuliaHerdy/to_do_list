@@ -9,13 +9,17 @@ form {
 
 table {
     border-collapse: collapse;
-    width: 60%;
+    width: auto;
 }
 
 th, td {
     border: 1px solid #ccc;
     padding: 8px;
     text-align: left;
+}
+
+td.overline{
+    text-decoration-line: line-through;
 }
 
 th {
@@ -32,4 +36,16 @@ a.delete-btn {
 
 a.delete-btn:hover {
     background-color: darkred;
+}
+
+a.complete-btn {
+    color: white;
+    background-color: green;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+a.complete-btn:hover {
+    background-color: darkgreen;
 }

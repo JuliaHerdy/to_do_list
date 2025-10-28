@@ -5,6 +5,30 @@ if (! $conn) {
     die("Erro ao se conectar no banco de dados");
 }
 
+if (isset($_GET["delete"])) {
+    $id = (int)$_GET["delete"];
+    $query = "delete from tasks where id = $1";
+    $result = pg_query_params($conn, $query, [$id]);
+
+    if ($result) {
+        echo "Task excluída com sucesso!";
+    } else {
+        echo "Erro ao excluir task: " . pg_last_error($conn);
+    }
+}
+
+if (isset($_GET["changestatus"])) {
+    $id = (int)$_GET["changestatus"];
+    $query = "update tasks set status = 1 where id = $1";
+    $result = pg_query_params($conn, $query, [$id]);
+
+    if ($result) {
+        echo "Task excluída com sucesso!";
+    } else {
+        echo "Erro ao excluir task: " . pg_last_error($conn);
+    }
+}
+
 $tasklist = pg_query($conn, "select * from tasks order by id asc");
 $tasks = pg_fetch_all($tasklist);
 
@@ -41,20 +65,44 @@ $tasks = pg_fetch_all($tasklist);
                 <th>Descrição</th>
                 <th>Data de início</th>
                 <th>Prazo</th>
-<!--                <th>Ações</th>-->
+                <th>Ações</th>
             </tr>
-            <?php foreach ($tasks as $row) { ?>
+            <?php foreach ($tasks as $row) {
+                     if ($row["status"] == 1) {?>
+                <tr>
+                    <td><?= $row['id'] ?></td>
+                    <td class="overline"><?= $row['task_title'] ?></td>
+                    <td class="overline"><?= $row['task_description'] ?></td>
+                    <td><?= $row['start_date'] ?></td>
+                    <td><?= $row['deadline'] ?></td>
+                    <td>
+                        <a class="delete-btn" href="?delete=<?= urlencode($row['id'] ?? '') ?>" onclick="return confirm('Tem certeza que deseja excluir esta tarefa?');">
+                            Excluir
+                        </a>
+                        <br>
+                        <br>
+                        <a class="complete-btn" href="?changestatus=<?= urlencode($row['id'] ?? '') ?>">
+                            Feito
+                        </a>
+                    </td>
+                </tr>
+            <?php } ?>
                 <tr>
                     <td><?= $row['id'] ?></td>
                     <td><?= $row['task_title'] ?></td>
                     <td><?= $row['task_description'] ?></td>
                     <td><?= $row['start_date'] ?></td>
                     <td><?= $row['deadline'] ?></td>
-<!--                    <td>-->
-<!--                        <a class="delete-btn" href="?deletepedido=--><?php //= urlencode($row['id'] ?? '') ?><!--" onclick="return confirm('Tem certeza que deseja excluir este pedido?');">-->
-<!--                            Excluir-->
-<!--                        </a>-->
-<!--                    </td>-->
+                    <td>
+                        <a class="delete-btn" href="?delete=<?= urlencode($row['id'] ?? '') ?>" onclick="return confirm('Tem certeza que deseja excluir esta tarefa?');">
+                            Excluir
+                        </a>
+                        <br>
+                        <br>
+                        <a class="complete-btn" href="?changestatus=<?= urlencode($row['id'] ?? '') ?>">
+                            Feito
+                        </a>
+                    </td>
                 </tr>
             <?php } ?>
         </table>
