@@ -8,15 +8,18 @@ form {
 }
 
 table {
-    border-collapse: collapse;
-    width: auto;
+    width: 100%;
+}
+
+tr:hover {
+    background-color: silver;
 }
 
 th, td {
-    border: 1px solid #ccc;
     padding: 8px;
     text-align: left;
 }
+
 
 td.overline{
     text-decoration-line: line-through;
