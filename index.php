@@ -21,12 +21,6 @@ if (isset($_GET["changestatus"])) {
     $id = (int)$_GET["changestatus"];
     $query = "update tasks set status = 1 where id = $1";
     $result = pg_query_params($conn, $query, [$id]);
-
-    if ($result) {
-        echo "Task excluída com sucesso!";
-    } else {
-        echo "Erro ao excluir task: " . pg_last_error($conn);
-    }
 }
 
 $tasklist = pg_query($conn, "select * from tasks order by id asc");
