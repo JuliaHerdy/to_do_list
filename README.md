@@ -1,14 +1,15 @@
-# PDI Telnav Fase 3
+# 🚀 TO DO LIST
 
-Bem-vindo a fase 3 do nosso PDI de desenvolvimento da Telnav. 
+O projeto consiste em uma "to do list" onde podemos adicionar 
+tasks e marca-las como concluídas.
 
-Para prosseguir nessa fase, faça o seguinte:
-- Crie um clone desse repositório
-- Acesse a pasta do projeto
-- Rode `docker compose up -d`
-- Crie uma branch com o seu nome para fazer os exercícios
-- Nunca, jamais, faça commit na branch main
 
-## Exercícios
-### Etapa 1
-- Continue o script `index.php`, adicionando o cadastro e listagem de pedidos.
+
+## 🛠️ Tecnologias Utilizadas
+
+Liste as principais tecnologias, frameworks e bibliotecas que você usou.
+
+* [PHP 8.2](https://www.php.net/)
+* [PostgreSQL](https://www.postgresql.org/)
+* [Docker](https://www.docker.com/)
+
