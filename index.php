@@ -1,9 +1,10 @@
 <?php
-$conn = pg_connect("host=192.168.241.61 port=5432 dbname=postgres user=root password=123");
 
-if (! $conn) {
-    die("Erro ao se conectar no banco de dados");
-}
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Src\Database\Database;
+
+$conn = new Database("192.168.241.61", "root", "123", "postgres", "5432");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $task_title = trim($_POST["task_title"]);
@@ -11,12 +12,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $deadline = trim($_POST["deadline"]);
     if ($task_title !== "") {
         $query = "insert into tasks (task_title, task_description, deadline) values ($1, $2, $3)";
-        $result = pg_query_params($conn, $query, [$task_title, $task_description, $deadline]);
+        $result = pg_query_params($conn->getConnection(), $query, [$task_title, $task_description, $deadline]);
 
         if ($result) {
             echo "Task cadastrada com sucesso!";
         } else {
-            echo "Erro ao cadastrar a task: " . pg_last_error($conn);
+            echo "Erro ao cadastrar a Task: " . pg_last_error($conn->getConnection());
         }
     } else {
         echo "Task é Obrigatória!";
@@ -26,22 +27,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if (isset($_GET["delete"])) {
     $id = (int)$_GET["delete"];
     $query = "delete from tasks where id = $1";
-    $result = pg_query_params($conn, $query, [$id]);
+    $result = pg_query_params($conn->getConnection(), $query, [$id]);
 
     if ($result) {
         echo "Task excluída com sucesso!";
     } else {
-        echo "Erro ao excluir task: " . pg_last_error($conn);
+        echo "Erro ao excluir Task: " . pg_last_error($conn->getConnection());
     }
 }
 
 if (isset($_GET["changestatus"])) {
     $id = (int)$_GET["changestatus"];
     $query = "update tasks set status = 1 where id = $1";
-    $result = pg_query_params($conn, $query, [$id]);
+    $result = pg_query_params($conn->getConnection(), $query, [$id]);
 }
 
-$tasklist = pg_query($conn, "select * from tasks order by id asc");
+$tasklist = pg_query($conn->getConnection(), "select * from tasks order by id asc");
 $tasks = pg_fetch_all($tasklist);
 
 ?>
